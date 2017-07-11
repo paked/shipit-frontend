@@ -39,7 +39,7 @@ function githubSignin() {
 			var user = result.user;
             var userDetails = firebase.auth();
             console.log(userDetails.currentUser.uid)
-            //console.log(userDetails.github.username)
+            console.log(userDetails)
 			console.log(token)
 			console.log(user)
 			//User Sucessfully Logged In
