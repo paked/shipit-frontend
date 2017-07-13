@@ -16,6 +16,7 @@ const projectsRef = database.ref("/projects");
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const query = database.ref("/projects").orderByValue().limitToLast(5);
 const connectedRef = database.ref(".info/connected");
+const usersRef = database.ref("/users/")
 
 var isConnected, userUID, userData;
 
@@ -210,13 +211,26 @@ function buildPage(data, key) {
 	displayProjects(data, key)
 }
 
-function addNewUser(){
-
+function addNewUser(userId){
+	var newUserRef = database.ref("/users/" + userId)
+    var updates = {};
+    newUSerRef.set({
+      name: userData.displayName,
+      date: getTodayDate()
+    });
 }
+
+  function addWinner(name) {
+    var winnersRef = database.ref(winners_route + currentBracketName);
+    var updates = {};
+    winnersRef.set({
+      winner: name,
+      date: getTodayDate()
+    });
+  }
 
 // Tests to see if /users/<userId> exists. 
 function checkForFirstTime(userId) {
-	var usersRef = database.ref("/users/")
 	usersRef.child('users').child(userId).once('value', function(snapshot) {
 		var exists = (snapshot.val() !== null);
 		userFirstTimeCallback(userId, exists);
@@ -230,6 +244,7 @@ function userFirstTimeCallback(userId, exists) {
     // Do something here you want to do for non-firstime users...
   } else {
     alert('user ' + userId + ' does not exist!');
+    addNewUser(userId);
     // Do something here you want to do for first time users (Store data in database?)
   }
 }
