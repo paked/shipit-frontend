@@ -156,6 +156,16 @@ function createProject() {
 		if (inputs[5].value) {
 			completed = false;
 		}
+		if(!checkIfValidURL(inputs[3].value))
+		{
+			completed = false;
+			inputs[3].className += " is-danger"
+		}
+		if(!checkIfValidURL(inputs[4].value))
+		{
+			completed = false;
+			inputs[4].className += " is-danger"
+		}
 		if (completed) {
 			var newProjectRef = projectsRef.push();
 			newProjectRef.set({
@@ -174,6 +184,19 @@ function createProject() {
 	} else {
 		//Mingjie work some css magic or something
 	}
+}
+
+function checkIfValidURL(link){
+	$.ajax({
+    type: 'HEAD',
+    url: link,
+	success: function() {
+		return true;
+	},
+	error: function() {
+	    return false
+	}
+	});
 }
 
 function convertTimestamp(id) {
