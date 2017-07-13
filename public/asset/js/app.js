@@ -16,7 +16,7 @@ const projectsRef = database.ref("/projects");
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const query = database.ref("/projects").orderByValue().limitToLast(5);
 const connectedRef = database.ref(".info/connected");
-const usersRef = database.ref("/users/")
+const databaseRef = database.ref("/")
 
 var isConnected, userUID, userData;
 
@@ -42,7 +42,7 @@ function githubSignin() {
             checkForFirstTime(userUID);
             //User Sucessfully Logged In
 
-			isLoggedIn(user, token);
+			isLoggedIn(userData, token);
 		}).catch(function (error) {
 			var errorCode = error.code;
 			var errorMessage = error.message;
@@ -235,9 +235,10 @@ function buildPage(data, key) {
 }
 
 function addNewUser(userId){
+	console.log('test')
 	var newUserRef = database.ref("/users/" + userId)
     var updates = {};
-    newUSerRef.set({
+    newUserRef.set({
       name: userData.displayName,
       upvoted: null,
       projects: null
@@ -246,7 +247,7 @@ function addNewUser(userId){
 
 // Tests to see if /users/<userId> exists. 
 function checkForFirstTime(userId) {
-	usersRef.child('users').child(userId).once('value', function(snapshot) {
+	databaseRef.child('users').child(userId).once('value', function(snapshot) {
 		var exists = (snapshot.val() !== null);
 		userFirstTimeCallback(userId, exists);
 	});
