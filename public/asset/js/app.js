@@ -17,17 +17,15 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 const query = database.ref("/projects").orderByValue().limitToLast(5);
 const connectedRef = database.ref(".info/connected");
 
-var isConnected;
-var userDetails;
-// .currentUser.uid
-// .provider
+var isConnected, userUID, userData;
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-	var cuser = firebase.auth().currentUser;
-	isLoggedIn(cuser);
+    userData = firebase.auth().currentUser;
+    userUID = userData.uid;
+    isLoggedIn(userData);
   } else {
-	//User Not Logged In
+    //User Not Logged In
   }
 });
 
@@ -36,13 +34,11 @@ function githubSignin() {
 
 		.then(function (result) {
 			var token = result.credential.accessToken;
-			var user = result.user;
-            var userDetails = firebase.auth();
-            console.log(userDetails.currentUser.uid)
-            console.log(userDetails)
-			console.log(token)
-			console.log(user)
-			//User Sucessfully Logged In
+            userData = result.user;
+            userUID = userData.uid;
+            console.log(token)
+            console.log(userData)
+            //User Sucessfully Logged In
 
 			isLoggedIn(user, token);
 		}).catch(function (error) {
@@ -76,6 +72,8 @@ function isLoggedOut() {
 
 	$("#userName").html("Not Signed In");
 	$("#useravatar").attr("src", "");
+
+	userData = undefined;
 }
 
 function isLoggedIn(user, token) {
@@ -153,10 +151,10 @@ function createProject() {
 				completed = false;
 			}
 		}
-		if (inputs[5].value != "" || undefined) {
+		if (inputs[5].value) {
 			completed = false;
 		}
-		if (completed == true) {
+		if (completed) {
 			var newProjectRef = projectsRef.push();
 			newProjectRef.set({
 				author: inputs[0].value,
@@ -167,7 +165,7 @@ function createProject() {
 				code: inputs[4].value,
 				upvote: 0,
 				featured: "false",
-                uid: userDetails
+                uid: userUID
 			});
 			closeShipper();
 		}
