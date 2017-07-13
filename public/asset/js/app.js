@@ -38,6 +38,7 @@ function githubSignin() {
             userUID = userData.uid;
             console.log(token)
             console.log(userData)
+            checkForFirstTime(userUID);
             //User Sucessfully Logged In
 
 			isLoggedIn(user, token);
@@ -211,4 +212,24 @@ function buildPage(data, key) {
 
 function addNewUser(){
 
+}
+
+// Tests to see if /users/<userId> exists. 
+function checkForFirstTime(userId) {
+	var usersRef = database.ref("/users/")
+	usersRef.child('users').child(userId).once('value', function(snapshot) {
+		var exists = (snapshot.val() !== null);
+		userFirstTimeCallback(userId, exists);
+	});
+}
+
+// Setup what to do with the user information.
+function userFirstTimeCallback(userId, exists) {
+  if (exists) {
+    alert('user ' + userId + ' exists!');
+    // Do something here you want to do for non-firstime users...
+  } else {
+    alert('user ' + userId + ' does not exist!');
+    // Do something here you want to do for first time users (Store data in database?)
+  }
 }

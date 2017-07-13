@@ -1,0 +1,28 @@
+[debug] [2017-07-13T13:44:35.300Z] ----------------------------------------------------------------------
+[debug] [2017-07-13T13:44:35.302Z] Command:      C:\Program Files\nodejs\node.exe C:\Users\kimse\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2017-07-13T13:44:35.303Z] CLI Version:  3.9.1
+[debug] [2017-07-13T13:44:35.303Z] Platform:     win32
+[debug] [2017-07-13T13:44:35.303Z] Node Version: v6.10.3
+[debug] [2017-07-13T13:44:35.304Z] Time:         Thu Jul 13 2017 08:44:35 GMT-0500 (Central Daylight Time)
+[debug] [2017-07-13T13:44:35.304Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-07-13T13:44:35.316Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-07-13T13:44:35.317Z] > authorizing via signed-in user
+[debug] [2017-07-13T13:44:35.319Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/shipit-7427d  
+ Thu Jul 13 2017 08:44:35 GMT-0500 (Central Daylight Time)
+[debug] [2017-07-13T13:44:35.814Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-13T13:44:35.816Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/shipit-7427d/tokens  
+ Thu Jul 13 2017 08:44:35 GMT-0500 (Central Daylight Time)
+[debug] [2017-07-13T13:44:36.182Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\intern\shipit-frontend'...
+[info] 
+[debug] [2017-07-13T13:44:36.192Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/shipit-7427d  
+ Thu Jul 13 2017 08:44:36 GMT-0500 (Central Daylight Time)
+[debug] [2017-07-13T13:44:36.377Z] <<< HTTP RESPONSE 200
+[debug] [2017-07-13T13:44:36.378Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/601650858338/clients/_:getWebAppConfig  
+ Thu Jul 13 2017 08:44:36 GMT-0500 (Central Daylight Time)
+[debug] [2017-07-13T13:44:36.821Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+
