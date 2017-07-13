@@ -219,9 +219,51 @@ function getTimeStamp() {
 	return date;
 }
 
-function upVote(key) {
-
+function startUpVote(key) {
+	checkIfAlreadyUpvoted(userUID,key)
+	//Get the project and add 1 to the upvote value, then get that same upvote value and display it
+	//Then, add that project key to the user's project child
 }
+
+function unVoteProject(userId, key) {
+	var tempRef = databaseRef.ref("/users/upVoted/" + key);
+	tempRef.remove();
+}
+
+function upVoteProject(userId, key) {
+	var tempRef = database.ref("/users/"+userId+"/upVoted/");
+	var updates = {
+		name:key
+	};
+	tempRef.update(updates)
+}
+
+function checkIfAlreadyUpvoted(userId,key) {
+	var checkRef = database.ref("/users/" + userId + "/upVoted/")
+	checkRef.once('value', function(snapshot) {
+		if(snapshot.val() === null)
+		{
+			upVoteProject(userId,key);
+		}else{
+			snapshot.forEach(function(data){
+				if(data.val().name == key)
+				{
+					unVoteProject(userId, key)
+					return;
+				}
+			});
+			upVoteProject(userId,key);
+		}
+		// if((snapshot.val().name).indexOf(key) != -1)
+		// {
+		// 	unVoteProject(userId,key);
+		// }else{
+		// 	upVoteProject(userId,key);
+		// }
+	});
+}
+
+//Make a listener for the upvote
 
 function getProp(id) {
 	var specificRef = database.ref("/projects/" + id)
