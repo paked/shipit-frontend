@@ -216,18 +216,10 @@ function addNewUser(userId){
     var updates = {};
     newUSerRef.set({
       name: userData.displayName,
-      date: getTodayDate()
+      upvoted: null,
+      projects: null
     });
 }
-
-  function addWinner(name) {
-    var winnersRef = database.ref(winners_route + currentBracketName);
-    var updates = {};
-    winnersRef.set({
-      winner: name,
-      date: getTodayDate()
-    });
-  }
 
 // Tests to see if /users/<userId> exists. 
 function checkForFirstTime(userId) {
