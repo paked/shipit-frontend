@@ -228,6 +228,7 @@ function startUpVote(key) {
 function unVoteProject(userId, key) {
 	var tempRef = database.ref("/users/"+ userId + "/upVoted/" + key);
 	tempRef.remove();
+	$("#" + key).removeClass("is-danger")
 }
 
 function upVoteProject(userId, key) {
@@ -237,6 +238,7 @@ function upVoteProject(userId, key) {
 		name:key
 	};
 	tempRef.update(updates)
+	$("#" + key).addClass("is-danger")
 }
 
 function checkIfAlreadyUpvoted(userId,key) {
