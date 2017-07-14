@@ -231,7 +231,8 @@ function unVoteProject(userId, key) {
 }
 
 function upVoteProject(userId, key) {
-	var tempRef = database.ref("/users/"+userId+"/upVoted/");
+	console.log(userId)
+	var tempRef = database.ref("/users/" + userId + "/upVoted/" + key);
 	var updates = {
 		name:key
 	};
