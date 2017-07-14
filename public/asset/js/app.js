@@ -17,14 +17,12 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 const query = database.ref("/projects").orderByValue().limitToLast(5);
 const connectedRef = database.ref(".info/connected");
 const databaseRef = database.ref("/")
-
-var isConnected, userUID, userData;
+//Check to see which projects we need to add is-danger to
+var isConnected;
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    userData = firebase.auth().currentUser;
-    userUID = userData.uid;
-    isLoggedIn(userData);
+    isLoggedIn(firebase.auth().currentUser);
   } else {
     //User Not Logged In
   }
@@ -35,14 +33,12 @@ function githubSignin() {
 
 		.then(function (result) {
 			var token = result.credential.accessToken;
-            userData = result.user;
-            userUID = userData.uid;
             console.log(token)
-            console.log(userData)
-            checkForFirstTime(userUID);
+            console.log(firebase.auth().currentUser)
+            checkForFirstTime(firebase.auth().currentUser.uid);
             //User Sucessfully Logged In
 
-			isLoggedIn(userData, token);
+			isLoggedIn(firebase.auth().currentUser, token);
 		}).catch(function (error) {
 			var errorCode = error.code;
 			var errorMessage = error.message;
@@ -74,8 +70,6 @@ function isLoggedOut() {
 
 	$("#userName").html("Not Signed In");
 	$("#useravatar").attr("src", "");
-
-	userData = undefined;
 }
 
 function isLoggedIn(user, token) {
@@ -177,7 +171,7 @@ function createProject() {
 				code: inputs[4].value,
 				upvote: 0,
 				featured: "false",
-                uid: userUID
+                uid: firebase.auth().currentUser.uid
 			});
 			closeShipper();
 		}
@@ -220,7 +214,7 @@ function getTimeStamp() {
 }
 
 function startUpVote(key) {
-	checkIfAlreadyUpvoted(userUID,key)
+	checkIfAlreadyUpvoted(firebase.auth().currentUser.uid,key)
 	//Get the project and add 1 to the upvote value, then get that same upvote value and display it
 	//Then, add that project key to the user's project child
 }
@@ -248,10 +242,14 @@ function upVoteProject(userId, key) {
 function updateUpVoteCount(key,state) {
 	var updateUpVoteRef = database.ref("/projects/" + key)
 	updateUpVoteRef.once("value", function(snapshot){
-		if(state === "add")
+		if(state === "add") {
 			updateUpVoteRef.update({upvote: snapshot.val().upvote+1});
-		else
+			//Update the HTML to reflect this
+		}
+		else {
 			updateUpVoteRef.update({upvote: snapshot.val().upvote-1});
+			//Update the HTML to reflect this
+		}
 	});
 }
 
@@ -290,7 +288,7 @@ function addNewUser(userId){
 	var newUserRef = database.ref("/users/" + userId)
     var updates = {};
     newUserRef.set({
-      name: userData.displayName,
+      name: firebase.auth().currentUser.displayName,
       upvoted: null,
       projects: null
     });
