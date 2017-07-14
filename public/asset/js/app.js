@@ -226,7 +226,7 @@ function startUpVote(key) {
 }
 
 function unVoteProject(userId, key) {
-	var tempRef = databaseRef.ref("/users/upVoted/" + key);
+	var tempRef = database.ref("/users/"+ userId + "/upVoted/" + key);
 	tempRef.remove();
 }
 
@@ -241,26 +241,18 @@ function upVoteProject(userId, key) {
 
 function checkIfAlreadyUpvoted(userId,key) {
 	var checkRef = database.ref("/users/" + userId + "/upVoted/")
+	var check = true;
 	checkRef.once('value', function(snapshot) {
-		if(snapshot.val() === null)
-		{
+		console.log(Object.keys(snapshot.val()).indexOf(key));
+		if(snapshot.val() === null) {
 			upVoteProject(userId,key);
-		}else{
-			snapshot.forEach(function(data){
-				if(data.val().name == key)
-				{
-					unVoteProject(userId, key)
-					return;
-				}
-			});
-			upVoteProject(userId,key);
+		} else {
+			if(Object.keys(snapshot.val()).indexOf(key) != -1) {
+				unVoteProject(userId, key);
+			}else {
+				upVoteProject(userId,key);
+			}
 		}
-		// if((snapshot.val().name).indexOf(key) != -1)
-		// {
-		// 	unVoteProject(userId,key);
-		// }else{
-		// 	upVoteProject(userId,key);
-		// }
 	});
 }
 
