@@ -19,6 +19,7 @@ const connectedRef = database.ref(".info/connected");
 const databaseRef = database.ref("/")
 //Check to see which projects we need to add is-danger to
 var isConnected;
+var projectsDisplayed = [];
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -80,6 +81,7 @@ function isLoggedIn(user, token) {
 	var name = (user.displayName).split(" ");
 	$("#fname-header").html(name[0] + ", t");
 	$("#useravatar").attr("src", user.photoURL);
+	loadUpVotedProjects(firebase.auth().currentUser.uid);
 }
 
 function getParams(name, url) {
@@ -123,6 +125,7 @@ connectedRef.on("value", function (snapshot) {
 
 
 function displayProjects(data, key) {
+	projectsDisplayed.push(key);
 	var newProject = {
 		author: data.author,
 		name: data.name,
@@ -248,7 +251,6 @@ function checkIfAlreadyUpvoted(userId,key) {
 	var checkRef = database.ref("/users/" + userId + "/upVoted/")
 	var check = true;
 	checkRef.once('value', function(snapshot) {
-		console.log(Object.keys(snapshot.val()).indexOf(key));
 		if(snapshot.val() === null) {
 			upVoteProject(userId,key);
 		} else {
@@ -295,5 +297,25 @@ function checkForFirstTime(userId) {
 function userFirstTimeCallback(userId, exists) {
   if (!exists) {
   	addNewUser(userId);
+  }else{
+  	loadUpVotedProjects(userId);
   }
 }
+
+function loadUpVotedProjects(userId) {
+	databaseRef.child('users').child(userId).child('upVoted').once('value', function(snapshot) {
+		snapshot.forEach(function(data) {
+			//console.log(data.val().name);
+			crossCheckProjects(data.val().name)
+		});
+		//var keysOfUpVoted = Object.keys(snapshot.val());
+		//crossCheckProjects(keysOfUpVoted)
+	});
+}
+
+function crossCheckProjects(key) {
+	if(projectsDisplayed.indexOf(key) != -1) {
+		$("#" + key).addClass("is-danger")
+	}
+}
+
