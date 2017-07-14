@@ -228,17 +228,31 @@ function startUpVote(key) {
 function unVoteProject(userId, key) {
 	var tempRef = database.ref("/users/"+ userId + "/upVoted/" + key);
 	tempRef.remove();
+	updateUpVoteCount(key,"subtract");
 	$("#" + key).removeClass("is-danger")
 }
 
 function upVoteProject(userId, key) {
 	console.log(userId)
-	var tempRef = database.ref("/users/" + userId + "/upVoted/" + key);
+	var addUpVoteRef = database.ref("/users/" + userId + "/upVoted/" + key);
 	var updates = {
 		name:key
 	};
-	tempRef.update(updates)
+	updateUpVoteCount(key,"add");
+	addUpVoteRef.update(updates);
+
+
 	$("#" + key).addClass("is-danger")
+}
+
+function updateUpVoteCount(key,state) {
+	var updateUpVoteRef = database.ref("/projects/" + key)
+	updateUpVoteRef.once("value", function(snapshot){
+		if(state === "add")
+			updateUpVoteRef.update({upvote: snapshot.val().upvote+1});
+		else
+			updateUpVoteRef.update({upvote: snapshot.val().upvote-1});
+	});
 }
 
 function checkIfAlreadyUpvoted(userId,key) {
