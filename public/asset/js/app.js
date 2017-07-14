@@ -33,13 +33,10 @@ function githubSignin() {
 	firebase.auth().signInWithPopup(provider)
 
 		.then(function (result) {
-			var token = result.credential.accessToken;
-            console.log(token)
-            console.log(firebase.auth().currentUser)
             checkForFirstTime(firebase.auth().currentUser.uid);
             //User Sucessfully Logged In
 
-			isLoggedIn(firebase.auth().currentUser, token);
+			isLoggedIn(firebase.auth().currentUser, result.credential.accessToken);
 		}).catch(function (error) {
 			var errorCode = error.code;
 			var errorMessage = error.message;
@@ -216,17 +213,17 @@ function startUpVote(key) {
 function unVoteProject(userId, key) {
 	var tempRef = database.ref("/users/"+ userId + "/upVoted/" + key);
 	tempRef.remove();
-	updateUpVoteCount(key,"subtract");
+	$("#num" + key).text(parseInt($("#num" + key).text()) - 1);
 	$("#" + key).removeClass("is-danger")
 }
 
 function upVoteProject(userId, key) {
-	console.log(userId)
 	var addUpVoteRef = database.ref("/users/" + userId + "/upVoted/" + key);
 	var updates = {
 		name:key
 	};
 	updateUpVoteCount(key,"add");
+	$("#num" + key).text(parseInt($("#num" + key).text()) + 1);
 	addUpVoteRef.update(updates);
 
 
