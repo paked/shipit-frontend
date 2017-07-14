@@ -285,7 +285,6 @@ function addNewUser(userId){
     });
 }
 
-// Tests to see if /users/<userId> exists. 
 function checkForFirstTime(userId) {
 	databaseRef.child('users').child(userId).once('value', function(snapshot) {
 		var exists = (snapshot.val() !== null);
@@ -293,14 +292,8 @@ function checkForFirstTime(userId) {
 	});
 }
 
-// Setup what to do with the user information.
 function userFirstTimeCallback(userId, exists) {
-  if (exists) {
-    alert('user ' + userId + ' exists!');
-    // Do something here you want to do for non-firstime users...
-  } else {
-    alert('user ' + userId + ' does not exist!');
-    addNewUser(userId);
-    // Do something here you want to do for first time users (Store data in database?)
+  if (!exists) {
+  	addNewUser(userId);
   }
 }
