@@ -17,7 +17,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 const query = database.ref("/projects").orderByValue().limitToLast(5);
 const connectedRef = database.ref(".info/connected");
 const databaseRef = database.ref("/")
-//Check to see which projects we need to add is-danger to
+
 var isConnected;
 var projectsDisplayed = [];
 
@@ -41,8 +41,8 @@ function githubSignin() {
 			var errorCode = error.code;
 			var errorMessage = error.message;
 
-			console.log(error.code)
-			console.log(error.message)
+			console.log(error.code);
+			console.log(error.message);
 			//User Log In Error
 		});
 }
@@ -101,7 +101,7 @@ $(function () {
 		});
 	} else {
 		query.on("child_added", function (snapshot) {
-			displayProjects(snapshot.val(), snapshot.key)
+			displayProjects(snapshot.val(), snapshot.key);
 		});
 	}
 	var action = getParams("action");
@@ -133,17 +133,17 @@ function displayProjects(data, key) {
 		upvote: data.upvote,
 		uid: key
 	}
-	loadShipment(newProject)
+	loadShipment(newProject);
 }
 
 function createProject() {
 	if (isConnected == true) {
-		var inputs = [document.getElementById("author"), document.getElementById("name"), document.getElementById("description"), document.getElementById("liveLink"), document.getElementById("codeLink"), document.getElementById("username")]
+		var inputs = [document.getElementById("author"), document.getElementById("name"), document.getElementById("description"), document.getElementById("liveLink"), document.getElementById("codeLink"), document.getElementById("username")];
 		var completed = true;
 		for (var i = 0; i < inputs.length - 1; i++) {
-			inputs[i].className = "input"
+			inputs[i].className = "input";
 			if (inputs[i].value == "" || undefined || null) {
-				inputs[i].className += " is-danger"
+				inputs[i].className += " is-danger";
 				completed = false;
 			}
 		}
@@ -153,12 +153,12 @@ function createProject() {
 		if(!checkIfValidURL(inputs[3].value))
 		{
 			completed = false;
-			inputs[3].className += " is-danger"
+			inputs[3].className += " is-danger";
 		}
 		if(!checkIfValidURL(inputs[4].value))
 		{
 			completed = false;
-			inputs[4].className += " is-danger"
+			inputs[4].className += " is-danger";
 		}
 		if (completed) {
 			var newProjectRef = projectsRef.push();
@@ -200,14 +200,12 @@ function convertTimestamp(id) {
 }
 
 function getTimeStamp() {
-	var date = Date.now()
+	var date = Date.now();
 	return date;
 }
 
 function startUpVote(key) {
-	checkIfAlreadyUpvoted(firebase.auth().currentUser.uid,key)
-	//Get the project and add 1 to the upvote value, then get that same upvote value and display it
-	//Then, add that project key to the user's project child
+	checkIfAlreadyUpvoted(firebase.auth().currentUser.uid,key);
 }
 
 function unVoteProject(userId, key) {
@@ -227,25 +225,23 @@ function upVoteProject(userId, key) {
 	addUpVoteRef.update(updates);
 
 
-	$("#" + key).addClass("is-danger")
+	$("#" + key).addClass("is-danger");
 }
 
 function updateUpVoteCount(key,state) {
-	var updateUpVoteRef = database.ref("/projects/" + key)
+	var updateUpVoteRef = database.ref("/projects/" + key);
 	updateUpVoteRef.once("value", function(snapshot){
 		if(state === "add") {
 			updateUpVoteRef.update({upvote: snapshot.val().upvote+1});
-			//Update the HTML to reflect this
 		}
 		else {
 			updateUpVoteRef.update({upvote: snapshot.val().upvote-1});
-			//Update the HTML to reflect this
 		}
 	});
 }
 
 function checkIfAlreadyUpvoted(userId,key) {
-	var checkRef = database.ref("/users/" + userId + "/upVoted/")
+	var checkRef = database.ref("/users/" + userId + "/upVoted/");
 	var check = true;
 	checkRef.once('value', function(snapshot) {
 		if(snapshot.val() === null) {
@@ -260,8 +256,6 @@ function checkIfAlreadyUpvoted(userId,key) {
 	});
 }
 
-//Make a listener for the upvote
-
 function getProp(id) {
 	var specificRef = database.ref("/projects/" + id)
 	specificRef.once("value", function (snapshot) {
@@ -270,7 +264,7 @@ function getProp(id) {
 }
 
 function buildPage(data, key) {
-	displayProjects(data, key)
+	displayProjects(data, key);
 }
 
 function addNewUser(userId){
@@ -302,17 +296,14 @@ function userFirstTimeCallback(userId, exists) {
 function loadUpVotedProjects(userId) {
 	databaseRef.child('users').child(userId).child('upVoted').once('value', function(snapshot) {
 		snapshot.forEach(function(data) {
-			//console.log(data.val().name);
-			crossCheckProjects(data.val().name)
+			crossCheckProjects(data.val().name);
 		});
-		//var keysOfUpVoted = Object.keys(snapshot.val());
-		//crossCheckProjects(keysOfUpVoted)
 	});
 }
 
 function crossCheckProjects(key) {
 	if(projectsDisplayed.indexOf(key) != -1) {
-		$("#" + key).addClass("is-danger")
+		$("#" + key).addClass("is-danger");
 	}
 }
 
