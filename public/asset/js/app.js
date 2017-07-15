@@ -219,7 +219,7 @@ function unVoteProject(userId, key) {
     tempRef.remove();
     $("#num" + key).text(parseInt($("#num" + key).text()) - 1);
     $("#" + key).removeClass("is-danger");
-    
+    updateUpVote(key, "subtract");
     upvoteStatus = true;
 }
 
