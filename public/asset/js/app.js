@@ -21,12 +21,12 @@ const databaseRef = database.ref("/");
 var isConnected;
 var projectsDisplayed = [];
 
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    isLoggedIn(firebase.auth().currentUser);
-  } else {
-    //User Not Logged In
-  }
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        isLoggedIn(firebase.auth().currentUser);
+    } else {
+        //User Not Logged In
+    }
 });
 
 function githubSignin() {
@@ -96,7 +96,7 @@ $(function () {
     var shared = getParams("shared");
     if (shared != null) {
         getProp(shared);
-        $("#launch").on("click", function() {
+        $("#launch").on("click", function () {
             window.location.replace("/?action=launch");
         });
     } else {
@@ -133,7 +133,7 @@ function displayProjects(data, key) {
         upvote: data.upvote,
         uid: key
     }
-    $("#loadButton").attr("onclick","loadMoreProjects('"+data.timestamp+"')")
+    $("#loadButton").attr("onclick", "loadMoreProjects('" + data.timestamp + "')")
     loadShipment(newProject);
 }
 
@@ -151,13 +151,11 @@ function createProject() {
         if (inputs[5].value) {
             completed = false;
         }
-        if(!checkIfValidURL(inputs[3].value))
-        {
+        if (!checkIfValidURL(inputs[3].value, false)) {
             completed = false;
             inputs[3].className += " is-danger";
         }
-        if(!checkIfValidURL(inputs[4].value))
-        {
+        if (!checkIfValidURL(inputs[4].value, true)) {
             completed = false;
             inputs[4].className += " is-danger";
         }
@@ -181,8 +179,12 @@ function createProject() {
     }
 }
 
-function checkIfValidURL(value){
-    return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
+function checkIfValidURL(value, ssl) {
+    if (ssl) {
+        return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
+    } else {
+        return /^(?:(?:(?:http?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
+    }
 }
 
 function convertTimestamp(id) {
@@ -206,11 +208,11 @@ function getTimeStamp() {
 }
 
 function startUpVote(key) {
-    checkIfAlreadyUpvoted(firebase.auth().currentUser.uid,key);
+    checkIfAlreadyUpvoted(firebase.auth().currentUser.uid, key);
 }
 
 function unVoteProject(userId, key) {
-    var tempRef = database.ref("/users/"+ userId + "/upVoted/" + key);
+    var tempRef = database.ref("/users/" + userId + "/upVoted/" + key);
     tempRef.remove();
     $("#num" + key).text(parseInt($("#num" + key).text()) - 1);
     $("#" + key).removeClass("is-danger")
@@ -219,9 +221,9 @@ function unVoteProject(userId, key) {
 function upVoteProject(userId, key) {
     var addUpVoteRef = database.ref("/users/" + userId + "/upVoted/" + key);
     var updates = {
-        name:key
+        name: key
     };
-    updateUpVoteCount(key,"add");
+    updateUpVoteCount(key, "add");
     $("#num" + key).text(parseInt($("#num" + key).text()) + 1);
     addUpVoteRef.update(updates);
 
@@ -229,29 +231,29 @@ function upVoteProject(userId, key) {
     $("#" + key).addClass("is-danger");
 }
 
-function updateUpVoteCount(key,state) {
+function updateUpVoteCount(key, state) {
     var updateUpVoteRef = database.ref("/projects/" + key);
-    updateUpVoteRef.once("value", function(snapshot){
-        if(state === "add") {
-            updateUpVoteRef.update({upvote: snapshot.val().upvote+1});
+    updateUpVoteRef.once("value", function (snapshot) {
+        if (state === "add") {
+            updateUpVoteRef.update({ upvote: snapshot.val().upvote + 1 });
         }
         else {
-            updateUpVoteRef.update({upvote: snapshot.val().upvote-1});
+            updateUpVoteRef.update({ upvote: snapshot.val().upvote - 1 });
         }
     });
 }
 
-function checkIfAlreadyUpvoted(userId,key) {
+function checkIfAlreadyUpvoted(userId, key) {
     var checkRef = database.ref("/users/" + userId + "/upVoted/");
     var check = true;
-    checkRef.once('value', function(snapshot) {
-        if(snapshot.val() === null) {
-            upVoteProject(userId,key);
+    checkRef.once('value', function (snapshot) {
+        if (snapshot.val() === null) {
+            upVoteProject(userId, key);
         } else {
-            if(Object.keys(snapshot.val()).indexOf(key) != -1) {
+            if (Object.keys(snapshot.val()).indexOf(key) != -1) {
                 unVoteProject(userId, key);
-            }else {
-                upVoteProject(userId,key);
+            } else {
+                upVoteProject(userId, key);
             }
         }
     });
@@ -268,49 +270,49 @@ function buildPage(data, key) {
     displayProjects(data, key);
 }
 
-function addNewUser(userId){
+function addNewUser(userId) {
     console.log('test')
     var newUserRef = database.ref("/users/" + userId)
     var updates = {};
     newUserRef.set({
-      name: firebase.auth().currentUser.displayName,
-      upvoted: null,
-      projects: null
+        name: firebase.auth().currentUser.displayName,
+        upvoted: null,
+        projects: null
     });
 }
 
 function checkForFirstTime(userId) {
-    databaseRef.child('users').child(userId).once('value', function(snapshot) {
+    databaseRef.child('users').child(userId).once('value', function (snapshot) {
         var exists = (snapshot.val() !== null);
         userFirstTimeCallback(userId, exists);
     });
 }
 
 function userFirstTimeCallback(userId, exists) {
-  if (!exists) {
-    addNewUser(userId);
-  }else{
-    loadUpVotedProjects(userId);
-  }
+    if (!exists) {
+        addNewUser(userId);
+    } else {
+        loadUpVotedProjects(userId);
+    }
 }
 
 function loadUpVotedProjects(userId) {
-    databaseRef.child('users').child(userId).child('upVoted').once('value', function(snapshot) {
-        snapshot.forEach(function(data) {
+    databaseRef.child('users').child(userId).child('upVoted').once('value', function (snapshot) {
+        snapshot.forEach(function (data) {
             crossCheckProjects(data.val().name);
         });
     });
 }
 
 function crossCheckProjects(key) {
-    if(projectsDisplayed.indexOf(key) != -1) {
+    if (projectsDisplayed.indexOf(key) != -1) {
         $("#" + key).addClass("is-danger");
     }
 }
 
 function loadMoreProjects(timestamp) {
-	//,displayProjects[displayProjects.length-1]
-    query.startAt(timestamp,displayProjects[displayProjects.length-1]).limitToLast(6).on("child_added", function (snapshot) {
+    //,displayProjects[displayProjects.length-1]
+    query.startAt(timestamp, displayProjects[displayProjects.length - 1]).limitToLast(6).on("child_added", function (snapshot) {
         displayProjects(snapshot.val(), snapshot.key);
         console.log(snapshot.val())
     });
