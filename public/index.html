@@ -129,10 +129,41 @@
         <button class="modal-close is-large" id="unlaunch"></button>
     </div>
 
+    <div class="modal" id="login-modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Please log in to continue
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <p>Please log in to GitHub! We will create your unique user identity once you are logged into GitHub.
+                            Don't worry, we won't hack into your GitHub account. <i>Right?</i></p>
+                        <div class="has-text-centered">
+                            <a class="button is-dark" id="gh-login-forced" href="#" onclick="githubSignin()">
+                                <span class="icon"><i class="fa fa-github"></i></span>
+                                <span>Sign In</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" id="unlaunch"></button>
+    </div>
+
     <div class="modal" id="ship-modal">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Ship a new project!
+                    </p>
+                </header>
                 <div class="card-content">
                     <div class="content">
                         <div class="field">

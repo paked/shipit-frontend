@@ -74,6 +74,8 @@ function isLoggedIn(user, token) {
     $("#gh-login").hide();
     $("#gh-logout").show();
 
+    closeShipper();
+
     $("#userName").html(user.displayName);
     var name = (user.displayName).split(" ");
     $("#fname-header").html(name[0] + ", t");
@@ -208,9 +210,13 @@ function getTimeStamp() {
 }
 
 function startUpVote(key) {
-    if (upvoteStatus) {
-        upvoteStatus = false;
-        checkIfAlreadyUpvoted(firebase.auth().currentUser.uid, key);
+    if (firebase.auth().currentUser != null) {
+        if (upvoteStatus) {
+            upvoteStatus = false;
+            checkIfAlreadyUpvoted(firebase.auth().currentUser.uid, key);
+        }
+    } else {
+        forceLogin();
     }
 }
 
