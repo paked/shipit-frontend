@@ -11,6 +11,8 @@ textarea {
     color: #E42D40!important;
 }
 
+
+
 .shipped .container {
     padding: 5px;
     margin-top: 10px;
@@ -52,6 +54,10 @@ a.card-footer-item.is-danger {
     border-style: solid;
     border-width: 1px;
     border-color: #E42D40;
+}
+
+.tag.is-danger {
+    background-color: #E42D40!important;
 }
 
 .wabble {
