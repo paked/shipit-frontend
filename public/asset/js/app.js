@@ -102,7 +102,7 @@ $(function () {
             window.location.replace("/?action=launch");
         });
     } else {
-        query.limitToLast(5).on("child_added", function (snapshot) {
+        query.limitToLast(10).on("child_added", function (snapshot) {
             displayProjects(snapshot.val(), snapshot.key);
         });
     }
